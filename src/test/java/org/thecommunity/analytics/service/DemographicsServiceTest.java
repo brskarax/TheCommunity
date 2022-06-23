@@ -34,4 +34,9 @@ public class DemographicsServiceTest {
     assertEquals(expected, demographicsService.findOldestMember());
   }
 
+  @Test
+  public void findAgeDifferenceInDays_shouldExecuteSuccessfully(){
+    assertEquals(2862l, demographicsService.findMembersAgeDifferenceInDays("Bill McKnight", "Paul Robinson"));
+  }
+
 }
