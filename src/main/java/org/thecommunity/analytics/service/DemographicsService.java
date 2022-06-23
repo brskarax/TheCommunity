@@ -1,6 +1,9 @@
 package org.thecommunity.analytics.service;
 
+import org.thecommunity.analytics.model.CommunityMember;
 import org.thecommunity.analytics.model.Gender;
+
+import java.util.Comparator;
 
 public class DemographicsService {
 
@@ -14,6 +17,13 @@ public class DemographicsService {
 
   public long findNumberOfMales(){
     return findGenderCount(Gender.MALE);
+  }
+
+  public CommunityMember findOldestMember(){
+    return dataImportService.importMembersFromLocal(RESOURCE_FILE).stream()
+        .sorted(Comparator.comparing(CommunityMember::dob))
+        .findFirst()
+        .orElseGet(null);
   }
 
   private long findGenderCount(final Gender gender) {
