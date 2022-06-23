@@ -1,7 +1,9 @@
 package org.thecommunity.analytics.service;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.thecommunity.analytics.exception.DataImportException;
 import org.thecommunity.analytics.model.CommunityMember;
 import org.thecommunity.analytics.model.Gender;
 
@@ -12,7 +14,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class DataImportServiceTest {
+public class DataImportServiceTest {
 
   private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -26,8 +28,15 @@ class DataImportServiceTest {
   @Test
   public void testImportMembers_shouldExecuteSuccessfully() {
     final List<CommunityMember> expected = createExpectedMembersList();
-    final List<CommunityMember> result = dataImportService.importMembersFromLocal( "AddressBookTest.csv");
+    final List<CommunityMember> result = dataImportService.importMembersFromLocal("AddressBookTest");
     assertEquals(expected, result);
+  }
+
+  @Test
+  public void testImportMembers_shouldThrowException_whenFileNotExists() {
+    final DataImportException thrown = Assertions.assertThrows(DataImportException.class,
+        () ->  dataImportService.importMembersFromLocal( "FileNotExists"));
+    assertEquals("Problem importing file with path: FileNotExists", thrown.getMessage());
   }
 
   private List<CommunityMember> createExpectedMembersList() {

@@ -5,8 +5,6 @@ import org.thecommunity.analytics.exception.DataImportException;
 import org.thecommunity.analytics.model.CommunityMember;
 import org.thecommunity.analytics.model.Gender;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -32,8 +30,8 @@ public class DataImportService {
           .filter(this::filterValidLine)
           .map(this::getCommunityMember)
           .collect(Collectors.toList());
-    } catch (URISyntaxException | IOException e) {
-     throw new DataImportException(String.format("Problem importing file with path %s", uri), e);
+    } catch (Exception e) {
+     throw new DataImportException(String.format("Problem importing file with path: %s", uri), e);
     }
   }
 
