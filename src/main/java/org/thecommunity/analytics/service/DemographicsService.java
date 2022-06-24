@@ -1,7 +1,7 @@
 package org.thecommunity.analytics.service;
 
-import org.thecommunity.analytics.exception.MultipleRecordException;
-import org.thecommunity.analytics.exception.NoRecordsFoundException;
+import org.thecommunity.analytics.exception.MultipleRecordsException;
+import org.thecommunity.analytics.exception.RecordsNotFoundException;
 import org.thecommunity.analytics.model.CommunityMember;
 import org.thecommunity.analytics.model.Gender;
 
@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.time.temporal.ChronoUnit.DAYS;
+import static java.util.Arrays.asList;
 
 public class DemographicsService {
 
@@ -33,21 +34,20 @@ public class DemographicsService {
   }
 
   public long findMembersAgeDifferenceInDays(final String firstMemberName, final String secondMemberName){
-    final CommunityMember firstMember = findMember(firstMemberName);
-    final CommunityMember secondMember = findMember(secondMemberName);
-    return DAYS.between(firstMember.dob(), secondMember.dob());
+    final List<CommunityMember> members = findMembers(asList(firstMemberName, secondMemberName));
+    return DAYS.between(members.get(0).dob(), members.get(1).dob());
   }
 
-  private CommunityMember findMember(final String name) {
+  private List<CommunityMember> findMembers(final List<String> names) {
     final List<CommunityMember> members = dataImportService.importMembersFromLocal(RESOURCE_FILE).stream()
-        .filter(e -> e.name().equals(name))
+        .filter(e -> names.contains(e.name()))
         .collect(Collectors.toList());
-    if(members.isEmpty()) {
-      throw new NoRecordsFoundException(String.format("No records found for the given name: %s", name));
-    } else if(members.size() > 1) {
-      throw new MultipleRecordException(String.format("Multiple records found for the given name: %s", name));
+    if(names.size() < members.size()) {
+      throw new RecordsNotFoundException(String.format("Some of the records cannot be found: %s", names));
+    } else if(names.size() > members.size()) {
+      throw new MultipleRecordsException(String.format("Multiple records found for some of the given names: %s", names));
     } else {
-      return members.get(0);
+      return members;
     }
   }
 
@@ -56,6 +56,5 @@ public class DemographicsService {
         .filter(e -> gender.equals(e.gender()))
         .count();
   }
-
 
 }
