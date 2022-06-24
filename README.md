@@ -1,4 +1,4 @@
-##Running instructions
+## Running instructions
 The program is implemented with JDK 17, please follow the instructions to build it:
 * Download JDK 17 that that matches with your OS: https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html
 * Follow the steps here for installation based on your OS: https://docs.oracle.com/en/java/javase/17/install/overview-jdk-installation.html
@@ -14,7 +14,7 @@ Your application needs to read the attached AddressBook file and answer the foll
 * How many days older is Bill than Paul?
 The methods to answer these questions are implemented in the `DemographicsService` and corresponding tests are in the `DemographicsServiceTest`
 
-##Assumptions & Improvements 
+## Assumptions & Improvements 
 This Java app was implemented considering the simplicity in mind, therefore it is open for improvements, such as:
 * the date format `dd/MM/yy` in the AddressBook is evaluated with a base date of 1900 rather than 2000. It means that the application doesn't support the community members born after 2000s. This can be easily improved by using full year in the date: dd/MM/yyyy, or using an extra flag in the AddressBook
 * The filename `AddressBook` can be read from a properties file which provides more flexibility
